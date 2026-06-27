@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>The extractive logic of AI</title>
-  <link rel="stylesheet" href="styles.css?v=11" />
+  <link rel="stylesheet" href="styles.css?v=13" />
 </head>
 <body>
 
@@ -108,7 +108,18 @@
           <textarea id="note-input" rows="3" placeholder="Your thought..." maxlength="600"></textarea>
           <button type="submit">Post</button>
         </form>
-        <ul id="notes-list" aria-live="polite"></ul>
+
+        <div class="notes-viewer">
+          <button type="button" id="notes-toggle" class="notes-toggle"
+                  aria-expanded="false" aria-controls="notes-list">
+            <span class="notes-toggle-label">View notes</span>
+            <span class="notes-count" id="notes-count"></span>
+            <span class="notes-chevron" aria-hidden="true"></span>
+          </button>
+          <div class="notes-collapse">
+            <ul id="notes-list" aria-live="polite"></ul>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -278,6 +289,6 @@
   "lenis": "https://unpkg.com/lenis@1.1.18/dist/lenis.mjs"
 }}
 </script>
-<script type="module" src="script.js?v=11"></script>
+<script type="module" src="script.js?v=13"></script>
 </body>
 </html>

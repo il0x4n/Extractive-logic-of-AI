@@ -667,6 +667,55 @@ html.lenis body { height: auto; }
 }
 .note-delete:hover { color: #fff; }
 
+/* ---------- Notes dropdown (view comments) ---------- */
+.notes-viewer { margin-top: 0.5rem; }
+.notes-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+  color: #fff;
+  font-family: inherit;
+  font-size: 1rem;
+  font-style: italic;
+  padding: 0.35rem 0.1rem;
+  cursor: pointer;
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+.notes-toggle:hover { border-color: #fff; }
+.notes-count {
+  font-style: normal;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+}
+.notes-chevron {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  transform: rotate(45deg) translate(-1px, -1px);
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.notes-viewer.open .notes-chevron {
+  transform: rotate(-135deg) translate(-1px, -1px);
+}
+/* Smooth height animation via the grid 0fr/1fr trick */
+.notes-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s cubic-bezier(0.2, 0.7, 0.2, 1),
+              opacity 0.35s ease;
+  opacity: 0;
+}
+.notes-viewer.open .notes-collapse {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  margin-top: 1rem;
+}
+.notes-collapse > #notes-list { overflow: hidden; min-height: 0; }
+
 /* ---------- Page 5: Sources ---------- */
 #page-sources { position: relative; }
 .sources-tabs {

@@ -359,8 +359,8 @@ document.querySelectorAll(".sources-tabs .tab").forEach(tab => {
    instructions). If left empty, notes fall back to localStorage
    so the form still works during development.
    ========================================================= */
-const SUPABASE_URL      = "";   // e.g. "https://xxxxx.supabase.co"
-const SUPABASE_ANON_KEY = "";   // anon/public key (safe to expose)
+const SUPABASE_URL      = "https://aioiyzxgoodsacrjohom.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_ODGtsBH6SLN2WYYwEscPUQ_TQ-94Q4P";
 const NOTES_TABLE       = "notes";
 const NOTES_LIMIT       = 50;
 
@@ -368,6 +368,22 @@ const noteForm  = document.getElementById("note-form");
 const noteInput = document.getElementById("note-input");
 const notesList = document.getElementById("notes-list");
 const noteSubmitBtn = noteForm?.querySelector("button[type=submit]");
+const notesViewer  = document.querySelector(".notes-viewer");
+const notesToggle  = document.getElementById("notes-toggle");
+const notesCountEl = document.getElementById("notes-count");
+
+/* Dropdown open/close for viewing notes */
+if (notesToggle && notesViewer) {
+  notesToggle.addEventListener("click", () => {
+    const open = notesViewer.classList.toggle("open");
+    notesToggle.setAttribute("aria-expanded", open ? "true" : "false");
+    notesToggle.querySelector(".notes-toggle-label").textContent =
+      open ? "Hide notes" : "View notes";
+  });
+}
+function updateNotesCount(n) {
+  if (notesCountEl) notesCountEl.textContent = n > 0 ? `(${n})` : "";
+}
 
 const useSupabase = !!(SUPABASE_URL && SUPABASE_ANON_KEY);
 
@@ -425,6 +441,7 @@ function localPost(text) {
 /* --- Render --- */
 function renderNotes(notes) {
   notesList.innerHTML = "";
+  updateNotesCount(notes.length);
   if (!notes.length) {
     const li = document.createElement("li");
     li.className = "notes-empty";
@@ -459,6 +476,10 @@ if (noteForm) {
       else await localPost(text);
       noteInput.value = "";
       await loadAndRender();
+      // Reveal the list so the visitor sees their note appear
+      if (notesViewer && !notesViewer.classList.contains("open")) {
+        notesToggle?.click();
+      }
     } catch (err) {
       alert("Could not post note: " + err.message);
     } finally {

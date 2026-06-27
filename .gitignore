@@ -1,0 +1,16 @@
+# Local tooling (Claude Code preview config + local permissions)
+.claude/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Python
+__pycache__/
+*.pyc
+
+# Working artifacts from the docx extraction step
+_unpacked/
+_extract.py
+*.tmp

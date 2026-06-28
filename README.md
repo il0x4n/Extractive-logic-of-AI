@@ -42,10 +42,15 @@ Or with Python's built-in server:
 python -m http.server 5173
 ```
 
-## Deploying (GitHub Pages)
+## Deploying (Vercel)
 
-Because `index.html` lives at the repository root, the site can be served as-is:
-**Settings → Pages → Source: deploy from branch → `main` / root.**
+The site is a zero-build static site, so Vercel serves it as-is:
+
+1. [vercel.com](https://vercel.com) → **Add New… → Project** → import this GitHub repo.
+2. Framework Preset: **Other** (no build command, no output dir to change).
+3. **Deploy.** Every `git push` to `main` then redeploys automatically.
+
+`vercel.json` only sets cache headers (long cache for images, always-fresh HTML).
 
 ## Structure
 

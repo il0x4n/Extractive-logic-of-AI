@@ -6,6 +6,25 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
+/* ---------- Design tokens (glass system) ---------- */
+:root {
+  --radius-sm: 14px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
+  --radius-xl: 36px;
+  --radius-pill: 999px;
+
+  --glass-bg:        rgba(255, 255, 255, 0.045);
+  --glass-bg-strong: rgba(22, 22, 26, 0.55);
+  --glass-hover:     rgba(255, 255, 255, 0.10);
+  --glass-border:    rgba(255, 255, 255, 0.14);
+  --glass-border-strong: rgba(255, 255, 255, 0.22);
+  --glass-blur:      blur(20px) saturate(1.4);
+  --glass-shadow:    0 10px 40px rgba(0, 0, 0, 0.45);
+  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 html, body {
   margin: 0;
   padding: 0;
@@ -16,6 +35,15 @@ html, body {
   line-height: 1.55;
   height: 100%;
   overflow: hidden;
+}
+
+/* Reusable glass surface */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow), var(--glass-highlight);
 }
 
 /* ---------- Loading curtain (rises on site load) ---------- */
@@ -213,40 +241,35 @@ html.lenis body { height: auto; }
   border-color: rgba(255,255,255,0.7);
 }
 
-/* ---------- Corner buttons (i, ?) ---------- */
+/* ---------- Corner buttons (i, ?) — frosted glass discs ---------- */
 .corner-btn {
   position: absolute;
   top: 1.5rem;
   right: 2rem;
-  width: 2.4rem;
-  height: 2.4rem;
-  border: 1px solid rgba(255,255,255,0.55);
+  width: 2.7rem;
+  height: 2.7rem;
+  border: 1px solid var(--glass-border);
   border-radius: 50%;
-  background: transparent;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow), var(--glass-highlight);
   color: #fff;
   font-family: "Times New Roman", Times, serif;
   font-style: italic;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   cursor: pointer;
   z-index: 5;
-  transition: border-color 0.35s ease, transform 0.35s ease, background 0.35s ease;
-}
-.corner-btn::before {
-  content: "";
-  position: absolute;
-  inset: -8px;
-  border: 1px solid rgba(255,255,255,0);
-  border-radius: 50%;
-  transition: border-color 0.4s ease, transform 0.4s ease;
+  transition: transform 0.4s var(--ease-soft), background 0.4s var(--ease-soft),
+              border-color 0.4s var(--ease-soft), box-shadow 0.4s var(--ease-soft);
 }
 .corner-btn:hover {
-  border-color: #fff;
-  transform: scale(1.05);
+  background: var(--glass-hover);
+  border-color: var(--glass-border-strong);
+  transform: scale(1.08) translateY(-1px);
+  box-shadow: 0 14px 44px rgba(0,0,0,0.5), var(--glass-highlight);
 }
-.corner-btn:hover::before {
-  border-color: rgba(255,255,255,0.35);
-  transform: scale(1.05);
-}
+.corner-btn:active { transform: scale(1.02); }
 .question-btn { font-style: normal; font-weight: bold; }
 
 /* ---------- Animated particle backdrop (used on title + consequences) ---------- */
@@ -386,10 +409,14 @@ html.lenis body { height: auto; }
 */
 .ai-box {
   position: relative;
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.55);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--glass-shadow), var(--glass-highlight);
   color: #fff;
-  padding: 1.6rem 1.4rem;
+  padding: 1.7rem 1.6rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -401,38 +428,34 @@ html.lenis body { height: auto; }
   cursor: pointer;
   overflow: hidden;
   isolation: isolate;
-  transition: border-color 0.5s ease, color 0.5s ease;
+  transition: transform 0.55s var(--ease-soft), background 0.55s var(--ease-soft),
+              border-color 0.55s var(--ease-soft), box-shadow 0.55s var(--ease-soft);
 }
-/* Sliding fill on hover from bottom */
-.ai-box::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: #f4f4f4;
-  transform: translateY(101%);
-  transition: transform 0.55s cubic-bezier(0.5, 0, 0.1, 1);
-  z-index: -1;
-}
-.ai-box:hover {
-  color: #000;
-  border-color: #f4f4f4;
-}
-.ai-box:hover::after { transform: translateY(0); }
+/* Soft radial sheen that follows toward the corner */
 .ai-box::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 80% 110%, rgba(255,255,255,0.04), transparent 65%);
+  background: radial-gradient(120% 80% at 80% 0%, rgba(255,255,255,0.10), transparent 55%);
+  opacity: 0.6;
   pointer-events: none;
+  transition: opacity 0.55s var(--ease-soft);
 }
+.ai-box:hover {
+  background: var(--glass-hover);
+  border-color: var(--glass-border-strong);
+  transform: translateY(-6px);
+  box-shadow: 0 22px 60px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.18);
+}
+.ai-box:hover::before { opacity: 1; }
 .ai-box-index {
   font-style: italic;
   font-size: 0.85rem;
   letter-spacing: 0.1em;
-  color: rgba(255,255,255,0.55);
-  transition: color 0.3s ease;
+  color: rgba(255,255,255,0.5);
+  transition: color 0.4s ease;
 }
-.ai-box:hover .ai-box-index { color: rgba(0,0,0,0.55); }
+.ai-box:hover .ai-box-index { color: rgba(255,255,255,0.8); }
 .ai-box-title {
   display: block;
   font-size: clamp(1.05rem, 1.6vw, 1.7rem);
@@ -495,10 +518,17 @@ html.lenis body { height: auto; }
   transform: translateX(-50%);
   margin: 0;
   font-style: italic;
-  color: #aaa;
-  font-size: 0.95rem;
+  color: rgba(255,255,255,0.75);
+  font-size: 0.9rem;
   z-index: 4;
   pointer-events: none;
+  padding: 0.45rem 1.1rem;
+  border-radius: var(--radius-pill);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-highlight);
 }
 #globe-container {
   flex: 1 1 0;
@@ -605,11 +635,14 @@ html.lenis body { height: auto; }
 }
 .notes-section { margin-top: 2rem; padding-bottom: 3rem; }
 .notes-help { color: rgba(255,255,255,0.55); font-size: 0.9rem; font-style: italic; margin: 0.2rem 0 1rem; }
-.notes-empty, .notes-error {
+#notes-list li.notes-empty,
+#notes-list li.notes-error {
   color: rgba(255,255,255,0.45);
   font-style: italic;
-  border-left: none !important;
-  padding-left: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0.4rem 0 !important;
 }
 #note-form {
   display: flex;
@@ -619,42 +652,65 @@ html.lenis body { height: auto; }
 }
 #note-input {
   width: 100%;
-  background: transparent;
-  border: 1px solid #fff;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
   color: #fff;
-  padding: 0.8rem;
+  padding: 1rem 1.1rem;
   font-family: inherit;
   font-size: 1rem;
   resize: vertical;
+  box-shadow: var(--glass-highlight);
+  transition: border-color 0.35s var(--ease-soft), background 0.35s var(--ease-soft);
 }
-#note-input:focus { outline: 1px solid #fff; outline-offset: 2px; }
+#note-input::placeholder { color: rgba(255,255,255,0.4); font-style: italic; }
+#note-input:focus {
+  outline: none;
+  border-color: var(--glass-border-strong);
+  background: var(--glass-hover);
+}
 #note-form button {
   align-self: flex-start;
-  background: transparent;
-  border: 1px solid #fff;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-pill);
   color: #fff;
-  padding: 0.5rem 1.6rem;
+  padding: 0.6rem 1.9rem;
   font-size: 1rem;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  box-shadow: var(--glass-highlight);
+  transition: transform 0.4s var(--ease-soft), background 0.4s var(--ease-soft),
+              border-color 0.4s var(--ease-soft);
 }
-#note-form button:hover { background: #fff; color: #000; }
+#note-form button:hover {
+  background: var(--glass-hover);
+  border-color: var(--glass-border-strong);
+  transform: translateY(-2px);
+}
+#note-form button:active { transform: translateY(0); }
 #notes-list {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.7rem;
 }
 #notes-list li {
-  border-left: 2px solid #555;
-  padding: 0.4rem 0 0.4rem 0.9rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: 0.8rem 1.1rem;
   font-style: italic;
-  color: #e0e0e0;
+  color: #e8e8e8;
   position: relative;
+  box-shadow: var(--glass-highlight);
 }
-.note-date { display: block; font-size: 0.75rem; color: #888; margin-bottom: 0.2rem; font-style: normal; }
+.note-date { display: block; font-size: 0.72rem; letter-spacing: 0.05em; color: rgba(255,255,255,0.45); margin-bottom: 0.3rem; font-style: normal; }
 .note-delete {
   position: absolute;
   right: 0;
@@ -672,19 +728,27 @@ html.lenis body { height: auto; }
 .notes-toggle {
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid rgba(255,255,255,0.3);
+  gap: 0.6rem;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-pill);
   color: #fff;
   font-family: inherit;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-style: italic;
-  padding: 0.35rem 0.1rem;
+  padding: 0.5rem 1.2rem;
   cursor: pointer;
-  transition: border-color 0.3s ease, color 0.3s ease;
+  box-shadow: var(--glass-highlight);
+  transition: transform 0.4s var(--ease-soft), background 0.4s var(--ease-soft),
+              border-color 0.4s var(--ease-soft);
 }
-.notes-toggle:hover { border-color: #fff; }
+.notes-toggle:hover {
+  background: var(--glass-hover);
+  border-color: var(--glass-border-strong);
+  transform: translateY(-2px);
+}
 .notes-count {
   font-style: normal;
   font-size: 0.8rem;
@@ -719,24 +783,34 @@ html.lenis body { height: auto; }
 /* ---------- Page 5: Sources ---------- */
 #page-sources { position: relative; }
 .sources-tabs {
-  display: flex;
-  gap: 0.5rem;
-  border-bottom: 1px solid #444;
-  margin-bottom: 1.5rem;
-  max-width: 1000px;
+  display: inline-flex;
+  gap: 0.4rem;
+  margin-bottom: 1.8rem;
+  padding: 0.35rem;
+  border-radius: var(--radius-pill);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-highlight);
 }
 .sources-tabs .tab {
   background: transparent;
-  border: 1px solid #fff;
-  border-bottom: none;
-  color: #fff;
-  padding: 0.55rem 1.6rem;
-  font-size: 1.05rem;
+  border: none;
+  border-radius: var(--radius-pill);
+  color: rgba(255,255,255,0.7);
+  padding: 0.5rem 1.5rem;
+  font-size: 1.02rem;
   cursor: pointer;
   font-style: italic;
-  transition: background 0.2s, color 0.2s;
+  transition: background 0.4s var(--ease-soft), color 0.4s var(--ease-soft);
 }
-.sources-tabs .tab.active { background: #fff; color: #000; }
+.sources-tabs .tab:hover { color: #fff; }
+.sources-tabs .tab.active {
+  background: rgba(255,255,255,0.92);
+  color: #000;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+}
 .tab-panel { display: none; max-width: 1000px; padding-bottom: 3rem; }
 .tab-panel.active { display: block; }
 .biblio, .picture-sources {
@@ -761,28 +835,33 @@ html.lenis body { height: auto; }
 }
 .overlay.open {
   display: flex;
-  background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(8px);
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
   animation: overlay-in 0.4s ease;
 }
 @keyframes overlay-in {
   from { background: rgba(0,0,0,0); backdrop-filter: blur(0px); }
-  to   { background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); }
+  to   { background: rgba(0,0,0,0.55); backdrop-filter: blur(14px); }
 }
 
 .overlay-panel {
-  background: rgba(8,8,8,0.96);
-  border: 1px solid rgba(255,255,255,0.45);
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(30px) saturate(1.5);
+  -webkit-backdrop-filter: blur(30px) saturate(1.5);
+  border: 1px solid var(--glass-border-strong);
+  border-radius: var(--radius-xl);
   max-width: 800px;
   width: 100%;
   max-height: 88vh;
   overflow-y: auto;
-  padding: 2.5rem 2.5rem 2rem;
+  padding: 2.7rem 2.7rem 2.2rem;
   position: relative;
   opacity: 0;
-  transform: translateY(20px) scale(0.985);
-  animation: panel-in 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  transform: translateY(24px) scale(0.98);
+  animation: panel-in 0.6s var(--ease-soft) forwards;
   animation-delay: 0.05s;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.16);
   scrollbar-width: thin;
   scrollbar-color: rgba(255,255,255,0.25) transparent;
 }
@@ -807,17 +886,28 @@ html.lenis body { height: auto; }
 }
 .overlay-close {
   position: absolute;
-  top: 0.6rem;
-  right: 0.9rem;
-  background: transparent;
-  border: none;
+  top: 1rem;
+  right: 1rem;
+  width: 2.3rem;
+  height: 2.3rem;
+  display: grid;
+  place-items: center;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 50%;
   color: #fff;
-  font-size: 1.7rem;
+  font-size: 1.4rem;
   line-height: 1;
   cursor: pointer;
-  padding: 0.2rem 0.5rem;
+  padding: 0;
+  transition: transform 0.35s var(--ease-soft), background 0.35s var(--ease-soft),
+              border-color 0.35s var(--ease-soft);
 }
-.overlay-close:hover { color: #ccc; }
+.overlay-close:hover {
+  background: var(--glass-hover);
+  border-color: var(--glass-border-strong);
+  transform: rotate(90deg);
+}
 
 .question-list {
   list-style: none;
@@ -842,7 +932,9 @@ html.lenis body { height: auto; }
   max-height: 360px;
   object-fit: cover;
   background: #111;
-  border: 1px solid #333;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.45);
 }
 .place-panel #place-caption {
   font-style: italic;
@@ -878,10 +970,13 @@ html.lenis body { height: auto; }
   position: fixed;
   pointer-events: none;
   z-index: 60;
-  padding: 0.45rem 0.85rem;
-  border: 1px solid rgba(255,255,255,0.45);
-  background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(4px);
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--glass-border-strong);
+  border-radius: var(--radius-pill);
+  background: rgba(20,20,24,0.55);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.5), var(--glass-highlight);
   font-style: italic;
   font-size: 0.95rem;
   color: #fff;
@@ -939,7 +1034,10 @@ html.lenis body { height: auto; }
   .ai-box--anchor,
   .ai-box--tall,
   .ai-box--wide,
-  .ai-box--small { grid-column: 1 / 2 !important; min-height: 120px !important; }
+  .ai-box--small { grid-column: 1 / 2 !important; min-height: 128px !important; }
+  /* Keep the title clear of the corner "read →" hint on small cards */
+  .ai-box { padding-bottom: 2.7rem; }
+  .ai-box-hint { bottom: 0.9rem; right: 1.1rem; }
 
   /* Hide page-dots, rely on natural swipe */
   .page-dots { display: none; }

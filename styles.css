@@ -634,7 +634,14 @@ html.lenis body { height: auto; }
   margin: 2.5rem auto 0;
 }
 .notes-section { margin-top: 2rem; padding-bottom: 3rem; }
-.notes-help { color: rgba(255,255,255,0.55); font-size: 0.9rem; font-style: italic; margin: 0.2rem 0 1rem; }
+.consequences-wrap .notes-help {
+  color: rgba(255,255,255,0.55);
+  font-size: 0.9rem;
+  font-style: italic;
+  max-width: none;
+  margin: 0.2rem 0 1rem;
+  text-align: left;
+}
 #notes-list li.notes-empty,
 #notes-list li.notes-error {
   color: rgba(255,255,255,0.45);
